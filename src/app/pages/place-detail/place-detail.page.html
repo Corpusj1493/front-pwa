@@ -1,0 +1,99 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ placeDetail?.name || 'Cargando Lugar...' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <div *ngIf="isLoading" class="ion-text-center ion-padding">
+    <ion-spinner></ion-spinner>
+    <p>Cargando detalles...</p>
+  </div>
+
+  <div *ngIf="placeDetail">
+    
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ placeDetail.name }}</ion-card-title>
+        <ion-card-subtitle>
+          Dirección: {{ placeDetail.address || 'No disponible' }}
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <h2 class="ion-text-center">
+          Votación Promedio: 
+          <span *ngIf="averageRating !== null">
+            {{ averageRating | number:'1.1-1' }} / 5 
+            ({{ reviews.length }} reseñas/votos)
+          </span>
+          <span *ngIf="averageRating === null">
+            Aún no hay votos.
+          </span>
+        </h2>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="ion-margin-top">
+      <ion-card-header>
+        <ion-card-title>¡Deja tu Voto y Comentario!</ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content> 
+        
+        <ion-item>
+          <ion-label position="floating">Votación (1-5)</ion-label>
+          <ion-range 
+            min="1" 
+            max="5" 
+            step="1" 
+            [(ngModel)]="newRating" 
+            color="primary"
+          >
+            <ion-label slot="start">1</ion-label>
+            <ion-label slot="end">5</ion-label>
+          </ion-range>
+        </ion-item>
+        <p class="ion-text-center">Tu Voto: <strong>{{ newRating }}</strong></p>
+
+        <ion-item class="ion-margin-top">
+          <ion-label position="floating">Comentario (Opcional)</ion-label>
+          <ion-textarea [(ngModel)]="newComment"></ion-textarea>
+        </ion-item>
+        
+        <ion-button 
+            expand="block" 
+            (click)="submitReview()" 
+            class="ion-margin-top"
+            [disabled]="isLoading"
+        >
+            Enviar Voto y Comentario
+        </ion-button>
+      </ion-card-content> 
+    </ion-card>
+
+    <ion-list-header>
+      <ion-label>Todos los Comentarios ({{ reviews.length }})</ion-label>
+    </ion-list-header>
+
+    <ion-card *ngFor="let review of reviews">
+      <ion-card-content>
+        <h3 *ngIf="review.comment">Comentario: "{{ review.comment }}"</h3> 
+        
+        <p>⭐ **Rating:** {{ review.rating }} / 5</p>
+        
+        <p>Por: **{{ review.user?.name || 'Anónimo' }}**</p> 
+        <p><small>Publicado: {{ review.created_at | date:'mediumDate' }}</small></p>
+      </ion-card-content>
+    </ion-card>
+    
+    <ion-item *ngIf="reviews.length === 0">
+        <ion-label>Sé el primero en dejar un voto o comentario.</ion-label>
+    </ion-item>
+    
+  </div>
+</ion-content>

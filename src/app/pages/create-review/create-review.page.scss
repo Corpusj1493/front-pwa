@@ -1,0 +1,83 @@
+/* src/app/pages/create-review/create-review.page.scss */
+
+ion-header {
+  ion-toolbar {
+    --background: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+  }
+}
+
+ion-content {
+  --background: #f4f5f8; /* Un fondo gris claro para que las tarjetas resalten */
+}
+
+/* Estilo para todas las tarjetas */
+ion-card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra suave */
+  border-radius: 12px;
+  margin: 16px 0;
+  
+  ion-card-header {
+    padding-bottom: 0;
+  }
+}
+
+/* Estilo para los campos de entrada */
+ion-item.modern-input {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --min-height: 48px;
+  
+  ion-input, ion-textarea {
+    --padding-start: 0;
+    --padding-end: 0;
+    color: var(--ion-color-dark);
+  }
+}
+
+/* Estilo específico para el slider de calificación */
+.rating-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.rating-display {
+  text-align: center;
+  font-size: 1.1em;
+  margin-top: 10px;
+  strong {
+    color: var(--ion-color-warning);
+    font-size: 1.2em;
+  }
+}
+
+/* Botón de envío */
+.submit-button {
+  margin-top: 25px;
+  height: 50px;
+  font-weight: bold;
+  --border-radius: 10px;
+}
+
+/* Feedback de éxito */
+.success-text {
+  margin-top: 5px;
+  color: var(--ion-color-secondary); /* Usa el color secundario (verde/azul) */
+  font-size: 0.8em;
+  text-align: center;
+}
+.preview-image {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 10px;
+  border: 1px solid var(--ion-color-medium-tint);
+}
+
+/* Ajuste para el spinner dentro del botón de ubicación */
+ion-button ion-spinner {
+  margin-right: 5px;
+}

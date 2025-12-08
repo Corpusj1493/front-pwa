@@ -1,0 +1,57 @@
+/* src/app/tab3/tab3.page.scss */
+
+ion-content {
+  --background: #f4f5f8;
+}
+
+.user-card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0;
+  
+  ion-avatar {
+    width: 60px;
+    height: 60px;
+    background: var(--ion-color-secondary-tint);
+    
+    ion-icon {
+      font-size: 3em;
+      color: var(--ion-color-secondary);
+    }
+  }
+  
+  ion-card-title {
+    font-size: 1.3em;
+    font-weight: bold;
+  }
+  
+  ion-card-subtitle {
+    color: var(--ion-color-medium);
+  }
+  
+}
+
+.options-list {
+  margin-top: 20px;
+  ion-item {
+    border-radius: 8px;
+    margin-bottom: 5px;
+    --inner-padding-end: 0;
+  }
+}
+
+
+.logout-item {
+  margin-top: 15px;
+  --color: #fff;
+  ion-label {
+    font-weight: bold;
+  }
+}

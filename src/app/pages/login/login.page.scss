@@ -1,0 +1,28 @@
+.custom-background {
+  // Fondo suave para contraste
+  --ion-background-color: var(--ion-color-light, #f4f5f8); 
+}
+
+.login-container {
+  // Centrar el contenido en la pantalla
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  max-width: 450px; // Limitar el ancho en pantallas grandes
+  margin: 0 auto;
+}
+
+.modern-card {
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); // Sombra moderna
+  border-radius: 12px;
+}
+
+// Estilo de los items de formulario
+ion-item {
+  --border-radius: 8px;
+  --min-height: 50px;
+  --inner-padding-end: 16px; 
+}

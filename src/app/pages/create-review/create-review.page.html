@@ -1,0 +1,154 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nueva Reseña y Lugar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form (ngSubmit)="submitReview()">
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">
+
+      <ion-list-header>
+        <ion-label>📍 **Ubicación del Lugar**</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-button 
+          expand="block" 
+          (click)="getCurrentLocation()" 
+          [disabled]="isLocating || isLoading"
+        >
+          <ion-icon slot="start" name="locate-outline"></ion-icon>
+          {{ isLocating ? 'Obteniendo...' : 'Obtener mi Ubicación Actual' }}
+        </ion-button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Latitud:</ion-label>
+        <ion-input [value]="reviewData.latitude || 'N/A'" readonly></ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label position="stacked">Longitud:</ion-label>
+        <ion-input [value]="reviewData.longitude || 'N/A'" readonly></ion-input>
+      </ion-item>
+
+      <ion-list-header>
+        <ion-label>🗺️ **Detalles del Lugar**</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-input 
+          label="Nombre del Lugar (Requerido)" 
+          labelPlacement="stacked" 
+          type="text" 
+          [(ngModel)]="reviewData.name" 
+          name="name" 
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input 
+          label="Dirección (Opcional)" 
+          labelPlacement="stacked" 
+          type="text" 
+          [(ngModel)]="reviewData.address" 
+          name="address"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-select 
+          label="Categoría (Opcional)" 
+          labelPlacement="stacked" 
+          placeholder="Selecciona una categoría"
+          [(ngModel)]="reviewData.category"
+          name="category"
+        >
+          <ion-select-option value="Restaurante">Restaurante</ion-select-option>
+          <ion-select-option value="Parque">Parque</ion-select-option>
+          <ion-select-option value="Tienda">Tienda</ion-select-option>
+          <ion-select-option value="Museo">Museo</ion-select-option>
+          <ion-select-option value="Otro">Otro</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-list-header>
+        <ion-label>⭐ **Tu Reseña**</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-range 
+          label="Calificación (Rating): {{ reviewData.rating }} estrellas"
+          labelPlacement="stacked"
+          min="1" 
+          max="5" 
+          step="1" 
+          color="primary"
+          [(ngModel)]="reviewData.rating" 
+          name="rating"
+        >
+          <ion-icon slot="start" name="star-outline"></ion-icon>
+          <ion-icon slot="end" name="star"></ion-icon>
+        </ion-range>
+      </ion-item>
+
+      <ion-item>
+        <ion-textarea 
+          label="Comentario (Requerido)" 
+          labelPlacement="stacked" 
+          rows="4" 
+          placeholder="Escribe tu experiencia..." 
+          [(ngModel)]="reviewData.comment" 
+          name="comment" 
+          required
+        ></ion-textarea>
+      </ion-item>
+
+      <ion-list-header>
+        <ion-label>📸 **Foto (Opcional)**</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-button 
+          expand="block" 
+          (click)="takePhoto()" 
+          [disabled]="isLoading"
+        >
+          <ion-icon slot="start" name="camera-outline"></ion-icon>
+          Tomar/Seleccionar Foto
+        </ion-button>
+      </ion-item>
+
+      <ion-item *ngIf="photoPath">
+        <ion-img 
+          [src]="photoPath" 
+          alt="Foto del lugar" 
+          class="ion-padding" 
+          style="height: 200px; object-fit: cover;"
+        ></ion-img>
+      </ion-item>
+
+      <ion-item *ngIf="errorMessage" color="danger">
+        <ion-label class="ion-text-wrap">{{ errorMessage }}</ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-button 
+          type="submit" 
+          expand="block" 
+          class="ion-margin-top" 
+          [disabled]="!isFormValid() || isLoading"
+        >
+          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+          <span *ngIf="!isLoading">Crear Lugar y Enviar Reseña</span>
+        </ion-button>
+      </ion-item>
+
+    </ion-list>
+  </form>
+</ion-content>

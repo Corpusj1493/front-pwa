@@ -1,0 +1,81 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Iniciar Sesión</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding custom-background">
+  <div class="login-container">
+    
+    <div class="ion-text-center ion-margin-bottom">
+      <ion-icon name="map-outline" size="large" color="primary"></ion-icon>
+      <h2>Bienvenido a PWA Reviews</h2>
+      <p>Descubre y comparte lugares increíbles.</p>
+    </div>
+
+    <ion-card class="modern-card">
+      <ion-card-content>
+        <form (ngSubmit)="login()">
+          
+          <ion-item class="ion-margin-bottom" fill="solid" shape="round">
+            <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
+            <ion-input 
+              label="Correo Electrónico" 
+              type="email" 
+              labelPlacement="floating"
+              [(ngModel)]="credentials.email" 
+              name="email" 
+              required
+            ></ion-input>
+          </ion-item>
+          
+          <ion-item class="ion-margin-bottom" fill="solid" shape="round">
+            <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
+            <ion-input 
+              label="Contraseña" 
+              type="password" 
+              labelPlacement="floating"
+              [(ngModel)]="credentials.password" 
+              name="password" 
+              required
+            ></ion-input>
+          </ion-item>
+          
+          <ion-note color="danger" *ngIf="errorMessage" class="ion-padding-start">{{ errorMessage }}</ion-note>
+
+          <div class="ion-padding-vertical ion-text-center">
+              <ngx-recaptcha2
+                  #captchaRef
+                  [siteKey]="siteKey"                                     
+                  (success)="handleRecaptchaSuccess($event)"              
+                  (error)="handleRecaptchaError()"                        
+                  name="g-recaptcha-response"                            
+              ></ngx-recaptcha2>
+          </div>
+          
+          <ion-button 
+            expand="block" 
+            shape="round" 
+            type="submit" 
+            color="primary"
+            class="ion-margin-top"
+            
+            [disabled]="isLoading || !recaptchaToken"
+          >
+            <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+            <span *ngIf="!isLoading">Iniciar Sesión</span>
+          </ion-button>
+
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="ion-text-center ion-margin-top">
+      <ion-label>¿No tienes una cuenta?</ion-label>
+      <ion-button fill="clear" color="secondary" [routerLink]="['/register']">
+        Regístrate aquí
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

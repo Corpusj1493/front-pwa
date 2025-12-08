@@ -1,0 +1,88 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Reseñas de Lugares</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/create-review">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="loadReviews(); $event.detail.complete()">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="ion-padding ion-text-center" *ngIf="isLoadingReviews">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando reseñas...</p>
+  </div>
+  
+  <div class="ion-padding ion-text-center" *ngIf="errorMessage">
+    <ion-icon name="alert-circle-outline" color="danger" size="large"></ion-icon>
+    <p class="ion-text-wrap" color="danger">{{ errorMessage }}</p>
+    <ion-button (click)="loadReviews()">Reintentar</ion-button>
+  </div>
+
+  <ion-list *ngIf="!isLoadingReviews && !errorMessage">
+    
+    <ion-list-header *ngIf="reviews.length === 0">
+      <ion-label>Aún no hay reseñas publicadas.</ion-label>
+    </ion-list-header>
+
+    <ion-card *ngFor="let review of reviews">
+      <ion-img 
+        *ngIf="review.photos?.length" 
+        [src]="review.photos?.[0]?.url" 
+        alt="Foto del lugar" 
+        class="card-image"
+      ></ion-img>
+      
+      <ion-card-header>
+        <ion-card-title>{{ review.place?.name || 'Lugar Desconocido' }}</ion-card-title>
+        
+        <ion-card-subtitle>
+          <ion-icon *ngFor="let i of [1,2,3,4,5]" 
+                    [name]="i <= review.rating ? 'star' : 'star-outline'" 
+                    [color]="i <= review.rating ? 'warning' : 'medium'"
+          ></ion-icon>
+        </ion-card-subtitle>
+
+      </ion-card-header>
+
+      <ion-card-content>
+        <p class="ion-text-wrap">"{{ review.comment }}"</p>
+        
+        <ion-item lines="none" class="ion-margin-top">
+          <ion-label>
+            <p>Por: **{{ review.user?.name || 'Anónimo' }}**</p>
+            <p *ngIf="review.place?.address">Dirección: {{ review.place?.address }}</p>
+            <p><small>Publicado: {{ review.created_at | date: 'mediumDate' }}</small></p>
+          </ion-label>
+        </ion-item>
+
+        <ion-button 
+         (click)="goToDetails(review.place_id)" 
+          routerDirection="forward"
+          expand="block" 
+          fill="solid" 
+          color="secondary"
+          class="ion-margin-top"
+        >
+          <ion-icon slot="start" name="information-circle-outline"></ion-icon>
+          Ver Detalles y Votaciones
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+  </ion-list>
+  
+</ion-content>
+
+<style>
+.card-image{
+  height: 200px;
+  object-fit: cover;
+}
+</style>

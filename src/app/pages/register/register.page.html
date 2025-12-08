@@ -1,0 +1,109 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding custom-background">
+  <div class="register-container">
+    
+    <div class="ion-text-center ion-margin-bottom">
+      <ion-icon name="person-add-outline" size="large" color="secondary"></ion-icon>
+      <h2>Únete a la Comunidad</h2>
+      <p>Regístrate para empezar a compartir reseñas.</p>
+    </div>
+
+    <ion-card class="modern-card">
+      <ion-card-content>
+        <form (ngSubmit)="register()">
+          
+          <ion-item class="ion-margin-bottom" fill="solid" shape="round">
+            <ion-icon name="person-outline" slot="start" color="medium"></ion-icon>
+            <ion-input 
+              label="Nombre" 
+              type="text" 
+              labelPlacement="floating"
+              [(ngModel)]="userData.name" 
+              name="name" 
+              required
+            ></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom" fill="solid" shape="round">
+            <ion-icon name="person-outline" slot="start" color="medium"></ion-icon>
+            <ion-input 
+              label="Apellido" 
+              type="text" 
+              labelPlacement="floating"
+              [(ngModel)]="userData.last_name" 
+              name="last_name" 
+              required
+            ></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom" fill="solid" shape="round">
+            <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
+            <ion-input 
+              label="Correo Electrónico" 
+              type="email" 
+              labelPlacement="floating"
+              [(ngModel)]="userData.email" 
+              name="email" 
+              required
+            ></ion-input>
+          </ion-item>
+          
+          <ion-item class="ion-margin-bottom" fill="solid" shape="round">
+            <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
+            <ion-input 
+              label="Contraseña (mín. 8 caracteres)" 
+              type="password" 
+              labelPlacement="floating"
+              [(ngModel)]="userData.password" 
+              name="password" 
+              required
+            ></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom" fill="solid" shape="round">
+            <ion-icon name="key-outline" slot="start" color="medium"></ion-icon>
+            <ion-input 
+              label="Confirmar Contraseña" 
+              type="password" 
+              labelPlacement="floating"
+              [(ngModel)]="userData.password_confirmation" 
+              name="password_confirmation" 
+              required
+            ></ion-input>
+          </ion-item>
+
+          <ion-note color="danger" *ngIf="errorMessage" class="ion-padding-start">{{ errorMessage }}</ion-note>
+
+          <ion-button 
+            expand="block" 
+            shape="round" 
+            type="submit" 
+            color="secondary"
+            class="ion-margin-top"
+            [disabled]="isLoading"
+          >
+            <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+            <span *ngIf="!isLoading">Registrarse</span>
+          </ion-button>
+
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="ion-text-center ion-margin-top">
+      <ion-label>¿Ya tienes una cuenta?</ion-label>
+      <ion-button fill="clear" color="primary" [routerLink]="['/login']">
+        Iniciar Sesión
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

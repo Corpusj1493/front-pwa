@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{ isEditMode ? 'Editar Usuario' : 'Crear Usuario' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="saveUser()">
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Datos de la Cuenta</ion-label>
+      </ion-list-header>
+      
+      <ion-item>
+        <ion-input label="Nombre" labelPlacement="floating" [(ngModel)]="name" name="name" required></ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-input label="Apellido" labelPlacement="floating" [(ngModel)]="last_name" name="last_name" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input 
+          label="Correo Electrónico" 
+          labelPlacement="floating" 
+          type="email" 
+          [(ngModel)]="email" 
+          name="email" 
+          required
+        ></ion-input>
+      </ion-item>
+      
+      <ion-list-header class="ion-margin-top">
+        <ion-label>{{ isEditMode ? 'Cambiar Contraseña (Opcional)' : 'Contraseña (Requerida)' }}</ion-label>
+      </ion-list-header>
+      
+      <ion-item>
+        <ion-input 
+          label="Contraseña" 
+          labelPlacement="floating" 
+          type="password" 
+          [(ngModel)]="password" 
+          name="password" 
+          [required]="!isEditMode"
+          minlength="8"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input 
+          label="Confirmar Contraseña" 
+          labelPlacement="floating" 
+          type="password" 
+          [(ngModel)]="password_confirmation" 
+          name="password_confirmation" 
+          [required]="!isEditMode"
+          minlength="8"
+        ></ion-input>
+      </ion-item>
+
+    </ion-list>
+    
+    <ion-button 
+      expand="block" 
+      type="submit" 
+      color="secondary" 
+      class="ion-margin-top"
+      [disabled]="isSubmitting"
+    >
+      <ion-spinner *ngIf="isSubmitting"></ion-spinner>
+      {{ isEditMode ? 'Actualizar Usuario' : 'Crear Usuario' }}
+    </ion-button>
+
+  </form>
+</ion-content>

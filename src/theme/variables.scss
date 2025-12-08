@@ -1,0 +1,22 @@
+// For information on how to create your own theme, please refer to:
+// https://ionicframework.com/docs/theming/
+/* src/theme/variables.scss */
+
+// ... otras variables
+
+$colors: (
+  // Color principal, úsalo para botones y elementos clave (ej: azul fuerte)
+  primary: #1e70e5, // Azul vibrante para una sensación moderna y de confianza
+  // Color secundario, para elementos interactivos o de contraste (ej: verde)
+  secondary: #00bf72, 
+  // Color de acento para errores
+  danger: #eb445a,
+  // Color de fondo de la aplicación
+  light: #f4f5f8,
+  // Color de texto
+  dark: #222428,
+  // Fondo de tarjetas y contenedores (blanco puro)
+  tertiary: #ffffff 
+);
+
+// ... el resto de la configuración de colores
