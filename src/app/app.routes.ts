@@ -38,22 +38,6 @@ export const routes: Routes = [
     loadComponent: () => import('./profile-edit/profile-edit.page').then( m => m.ProfileEditPage)
   },
   {
-    path: 'admin-dashboard',
-    loadComponent: () => import('./pages/admin-dashboard/admin-dashboard.page').then( m => m.AdminDashboardPage)
-  },
-  {
-    path: 'admin-dashboard',
-    loadComponent: () => import('./pages/admin-dashboard/admin-dashboard.page').then( m => m.AdminDashboardPage)
-  },
-  {
-    path: 'user-management',
-    loadComponent: () => import('./pages/user-management/user-management.page').then( m => m.UserManagementPage)
-  },
-  {
-    path: 'place-management',
-    loadComponent: () => import('./pages/place-management/place-management.page').then( m => m.PlaceManagementPage)
-  },
-  {
     path: 'user-form-modal',
     loadComponent: () => import('./pages/user-management/user-form-modal/user-form-modal.page').then( m => m.UserFormModalPage)
   },

@@ -24,39 +24,29 @@ export const routes: Routes = [
           import('../pages/profile/profile.page').then((m) => m.ProfilePage),
       },
       {
-        path: 'tab4',
-        loadComponent: () =>
-          import('../pages/admin-dashboard/admin-dashboard.page').then((m) => m.AdminDashboardPage),
-        children: [
-          // La ruta principal /tabs/tab4 mostrará el dashboard
-          {
-            path: '', 
-            redirectTo: 'dashboard', 
-            pathMatch: 'full'
-          },
-          {
-            path: 'dashboard', // /tabs/tab4/dashboard
-            loadComponent: () => import('../pages/admin-dashboard/admin-dashboard.page').then(m => m.AdminDashboardPage)
-          },
-          // Rutas para la gestión de usuarios (necesitas crear este componente)
-          {
-            path: 'users', // /tabs/tab4/users
-            loadComponent: () => import('../pages/user-management/user-management.page').then(m => m.UserManagementPage)
-          },
-          // Rutas para la gestión de lugares (necesitas crear este componente)
-          /*{
-            path: 'places', // /tabs/tab4/places
-            loadComponent: () => import('../pages/admin/place-management/place-management.page').then(m => m.PlaceManagementPage)
-          },*/
-        ]
-      },
+        path: 'tab4',
+        loadComponent: () =>
+          import('../pages/admin-dashboard/admin-dashboard.page').then((m) => m.AdminDashboardPage),
+      },
+      // 🎯 RUTA 2: Gestión de Usuarios (Debe ser una ruta hermana de tab4)
+      {
+        path: 'admin-users', // Usar un nombre único para evitar conflictos
+        loadComponent: () =>
+          import('../pages/user-management/user-management.page').then((m) => m.UserManagementPage),
+      },
+      // 🎯 RUTA 3: Gestión de Lugares
+      {
+        path: 'admin-places', // Usar un nombre único
+        loadComponent: () =>
+          import('../pages/place-management/place-management.page').then((m) => m.PlaceManagementPage),
+      },
       {
         path: 'place-detail/:id',
         loadComponent: () => import('../pages/place-detail/place-detail.page').then(m => m.PlaceDetailPage)
       },
       {
         path: '',
-        redirectTo: '',
+        redirectTo: 'tab1',
         pathMatch: 'full',
       },
     ],
