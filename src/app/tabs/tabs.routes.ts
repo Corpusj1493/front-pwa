@@ -24,7 +24,7 @@ export const routes: Routes = [
           import('../pages/profile/profile.page').then((m) => m.ProfilePage),
       },
       {
-        path: 'tab4',
+        path: 'dash',
         loadComponent: () =>
           import('../pages/admin-dashboard/admin-dashboard.page').then((m) => m.AdminDashboardPage),
       },

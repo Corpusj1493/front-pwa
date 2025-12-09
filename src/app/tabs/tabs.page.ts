@@ -12,8 +12,8 @@ import { AuthService } from '../services/auth.service'; // ⬅️ 1. Importar Au
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss'],
-  imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, CommonModule, IonRouterOutlet],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, CommonModule, ],
+  //schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);

@@ -3,6 +3,11 @@ import { Routes } from '@angular/router';
 
 
 export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
   // Rutas de Autenticación
   {
     path: 'login',
@@ -15,7 +20,7 @@ export const routes: Routes = [
   
   // Rutas Protegidas (la página principal de la app)
   {
-    path: '',
+    path: 'tabs',
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes), 
   },
   

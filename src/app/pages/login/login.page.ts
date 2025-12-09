@@ -1,12 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+//import { IonicModule } from '@ionic/angular';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService, LoginPayload } from '../../services/auth.service';
 import { finalize } from 'rxjs/operators';
 import { NgxCaptchaModule, ReCaptcha2Component } from 'ngx-captcha';
 import { environment } from 'src/environments/environment';
+// 🎯 CLAVE: Importaciones individuales de Ionic
+import { 
+  IonHeader, IonToolbar, IonTitle, IonContent, 
+  IonIcon, IonCard, IonCardContent, IonInput, 
+  IonItem, IonNote, IonButton, IonLabel, IonSpinner 
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +20,30 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./login.page.scss'],
   // Importaciones Standalone
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterModule, NgxCaptchaModule] 
+  imports: [
+    // Módulos de Angular
+    CommonModule, 
+    FormsModule, 
+    RouterModule, 
+    
+    // Módulos de Terceros
+    NgxCaptchaModule,
+    
+    // 🎯 CLAVE: Importaciones individuales de Ionic utilizadas en login.page.html
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonContent, 
+    IonIcon, 
+    IonCard, 
+    IonCardContent, 
+    IonInput, 
+    IonItem, 
+    IonNote, 
+    IonButton, 
+    IonLabel, 
+    IonSpinner // Añadido para el spinner de carga
+  ]
 })
 export class LoginPage  {
   
@@ -82,7 +111,7 @@ export class LoginPage  {
           console.log('✅ LOGIN EXITOSO. Intentando redireccionar a /tab1');
           // Navegar a la página principal de la app (ej: /tabs/explore)
          setTimeout(() => {
-            this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
+            this.router.navigateByUrl('/tabs/tabs/tab1', { replaceUrl: true });
           }, 100);
         }
       },

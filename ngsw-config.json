@@ -23,7 +23,51 @@
       "resources": {
         "files": [
           "/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
+        ],
+        "urls": [
+          "/icons/**"
         ]
+      }
+    }
+  ],
+  "dataGroups": [
+     {
+      "name": "api-login-cache",
+      "urls": [
+        "/api/login",
+        "/api/login/**"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 20,
+        "maxAge": "1h",
+        "timeout": "5s"
+      }
+    },
+    {
+      "name": "api-places-cache",
+      "urls": [
+        "/api/lugares",
+        "/api/lugares/**"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 20,
+        "maxAge": "1h",
+        "timeout": "5s"
+      }
+    },
+    {
+      "name": "api-reviews-cache",
+      "urls": [
+        "/api/reseñas",
+        "/api/reseñas/**"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 20,
+        "maxAge": "30m",
+        "timeout": "5s"
       }
     }
   ]
