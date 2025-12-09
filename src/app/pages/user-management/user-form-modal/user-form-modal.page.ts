@@ -3,7 +3,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController, LoadingController, AlertController } from '@ionic/angular';
+import { 
+  ModalController, LoadingController, AlertController, 
+  IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, 
+  IonIcon, IonContent, IonList, IonListHeader, IonLabel, 
+  IonItem, IonInput, IonSpinner // <-- Añadimos todos los componentes usados
+} from '@ionic/angular/standalone'; // <-- Usamos /standalone
 import { UserService, User, UserCreatePayload, UserUpdatePayload } from '../../../services/user';
 import { finalize, Observable } from 'rxjs';
 
@@ -13,7 +18,11 @@ import { finalize, Observable } from 'rxjs';
   templateUrl: './user-form-modal.page.html',
   styleUrls: ['./user-form-modal.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [ CommonModule, FormsModule, // 🎯 CLAVE: Importaciones individuales para Standalone
+    IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, 
+    IonIcon, IonContent, IonList, IonListHeader, IonLabel, 
+    IonItem, IonInput, IonSpinner // Añadir todos aquí
+  ]
 })
 export class UserFormModalPage implements OnInit {
   
