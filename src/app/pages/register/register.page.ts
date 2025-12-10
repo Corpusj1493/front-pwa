@@ -1,26 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, AlertController } from '@ionic/angular'; // Usamos AlertController para mensajes
+import { IonicModule, AlertController, IonSpinner } from '@ionic/angular'; // Usamos AlertController para mensajes
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { finalize } from 'rxjs/operators';
+import { NgxCaptchaModule, ReCaptcha2Component } from 'ngx-captcha'; 
+import { environment } from 'src/environments/environment'; // ⬅️ Importar environment
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterModule]
+  imports: [IonicModule,NgxCaptchaModule, CommonModule, FormsModule, RouterModule]
 })
 export class RegisterPage {
-
+  // 🎯 1. Referencia a la casilla de reCAPTCHA
+  @ViewChild('captchaRef') captchaRef!: ReCaptcha2Component;
+  // 🎯 2. Variables de reCAPTCHA
+  siteKey: string = environment.recaptchaSiteKey; // Usar la clave del environment
+  recaptchaToken: string | null = null;
   userData = { 
     name: '', 
     last_name: '', 
     email: '', 
     password: '', 
-    password_confirmation: '' 
+    password_confirmation: '' ,
+    recaptchaToken: '' // ⬅️ Añadir el campo para el token
   };
   isLoading: boolean = false;
   errorMessage: string | null = null;
@@ -31,9 +38,38 @@ export class RegisterPage {
     private alertController: AlertController // Para mostrar alertas de éxito/error
   ) { }
 
+  // 🎯 3. Manejadores de reCAPTCHA
+  handleRecaptchaSuccess(token: string) {
+      this.recaptchaToken = token;
+      this.userData.recaptchaToken = token;
+      console.log('✅ reCAPTCHA de Registro resuelto.');
+  }
+  handleRecaptchaError() {
+      this.recaptchaToken = null;
+      this.userData.recaptchaToken = '';
+      console.error('❌ Error en reCAPTCHA de Registro.');
+      this.errorMessage = 'Hubo un problema con la verificación de seguridad.'; 
+  }
+  resetRecaptcha() {
+      if (this.captchaRef) { 
+          this.recaptchaToken = null;
+          this.userData.recaptchaToken = '';
+          // @ts-ignore: El método reset() existe en ReCaptcha2Component
+          this.captchaRef.reset(); 
+          console.log('🔄 reCAPTCHA de Registro reseteado.');
+      }
+  }
+
   register() {
     this.isLoading = true;
     this.errorMessage = null;
+
+    // 🎯 4. Validar reCAPTCHA
+    if (!this.recaptchaToken) {
+        this.errorMessage = 'Por favor, completa la verificación reCAPTCHA.';
+        this.isLoading = false;
+        return;
+    }
 
     // Validación simple en cliente antes de enviar
     if (this.userData.password !== this.userData.password_confirmation) {

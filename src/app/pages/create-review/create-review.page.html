@@ -36,6 +36,21 @@
         <ion-input [value]="reviewData.longitude || 'N/A'" readonly></ion-input>
       </ion-item>
 
+      <ion-item>
+        <ion-input 
+          label="Dirección (Clic en el mapa o autocompletado)" 
+          labelPlacement="stacked" 
+          type="text" 
+          [(ngModel)]="reviewData.address" 
+          name="address"
+          id="addressInput"
+        ></ion-input>
+      </ion-item>
+
+      <div class="ion-padding-horizontal">
+        <div #mapElement id="map" style="height: 300px; width: 100%; margin-top: 10px; border-radius: 8px;"></div>
+      </div>
+
       <ion-list-header>
         <ion-label>🗺️ **Detalles del Lugar**</ion-label>
       </ion-list-header>

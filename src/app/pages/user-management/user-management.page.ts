@@ -2,10 +2,18 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { add, personAddOutline, trashOutline } from 'ionicons/icons';
+import { 
+  AlertController, LoadingController, ModalController,
+  // 🎯 CLAVE: Importa TODOS los componentes usados en management.html
+  IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, 
+  IonIcon, IonContent, IonList, IonListHeader, IonLabel, 
+  IonItem, IonSpinner, IonBackButton,
+} from '@ionic/angular/standalone'; // <-- Usamos /standalone
 import { UserService, User } from '../../services/user';
 import { finalize } from 'rxjs/operators';
 import { UserFormModalPage } from './user-form-modal/user-form-modal.page';
+import { addIcons } from 'ionicons';
 // Importaremos el componente Modal de Formulario de Usuario aquí (Lo crearemos después)
 
 
@@ -14,7 +22,10 @@ import { UserFormModalPage } from './user-form-modal/user-form-modal.page';
   templateUrl: './user-management.page.html',
   styleUrls: ['./user-management.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  imports: [CommonModule, // 🎯 CLAVE: Lista de componentes individuales de Ionic
+    IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, 
+    IonIcon, IonContent, IonList, IonListHeader, IonLabel, 
+    IonItem, IonSpinner, IonBackButton]
 })
 export class UserManagementPage implements OnInit {
   
@@ -26,7 +37,9 @@ export class UserManagementPage implements OnInit {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
-  ) { }
+  ) { 
+    addIcons({ add, personAddOutline, trashOutline });
+   }
 
   ngOnInit() {
     this.loadUsers();

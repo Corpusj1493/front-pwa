@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, AlertController, ToastController } from '@ionic/angular';
@@ -13,6 +13,9 @@ import { PlaceService } from '../../services/place.services'; // ¡NUEVO SERVICI
 import { finalize, switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs'; 
 
+declare var google: any;
+const GOOGLE_MAPS_API_KEY = 'AIzaSyAdliRkZrJfWT_m2xJ6D08DDusEmuN9cPI';
+
 @Component({
   selector: 'app-create-review',
   templateUrl: './create-review.page.html',
@@ -21,6 +24,9 @@ import { forkJoin } from 'rxjs';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class CreateReviewPage implements OnInit {
+
+  // 🎯 Referencia al DIV del mapa en el HTML
+  @ViewChild('mapElement', { static: true }) mapElement!: ElementRef;
 
   // ⚠️ Modelo de datos ajustado para la API (Lugar + Reseña)
   reviewData = {
@@ -39,6 +45,11 @@ export class CreateReviewPage implements OnInit {
     photo_base64: '' as string | null, // Base64 sin el prefijo 'data:image/jpeg;base64,'
   };
 
+  // 🎯 Variables del Mapa
+  map!: any; // Objeto mapa de Google Maps
+  marker!: any; // Objeto marcador
+  geocoder!: any;
+
   photoPath: string | null = null;
   isLoading: boolean = false;
   isLocating: boolean = false;
@@ -54,8 +65,99 @@ export class CreateReviewPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getCurrentLocation(); // Intentar obtener la ubicación al iniciar
+  this.loadGoogleMapsScript().then(() => { 
+    this.getCurrentLocation(true);
+  });
+     // Intentar obtener la ubicación al iniciar
   }
+// --- GESTIÓN DE MAPAS Y UBICACIÓN ---
+
+  /** * Carga el script de Google Maps dinámicamente.
+   */
+  loadGoogleMapsScript(): Promise<void> {
+    return new Promise((resolve) => {
+        if (typeof google !== 'undefined' && google.maps) {
+            resolve();
+            return;
+        }
+        
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`; // Necesitamos 'places'
+        script.onload = () => resolve();
+        script.onerror = () => console.error('Fallo al cargar el script de Google Maps.');
+        document.head.appendChild(script);
+    });
+  }
+  /**
+   * Inicializa el mapa después de tener las coordenadas.
+   */
+  async initMap() {
+    // Coordenadas por defecto (ej: Torreón) si no hay ubicación actual
+    const defaultCenter = { lat: 25.5434, lng: -103.3957 };
+    const center = this.reviewData.latitude && this.reviewData.longitude 
+                   ? { lat: this.reviewData.latitude, lng: this.reviewData.longitude }
+                   : defaultCenter;
+                   
+    const mapOptions = {
+        center: center,
+        zoom: 12,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    this.geocoder = new google.maps.Geocoder();
+    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
+    this.marker = new google.maps.Marker({
+        map: this.map,
+        position: center,
+        draggable: true,
+        title: 'Nueva Ubicación'
+    });
+
+    // 1. Listener para el clic en el mapa: Mueve el marcador y Geocodifica
+    this.map.addListener('click', (event: any) => {
+        this.placeMarkerAndGeocode(event.latLng);
+    });
+
+    // 2. Listener para arrastrar el marcador: Geocodifica al finalizar el arrastre
+    this.marker.addListener('dragend', (event: any) => {
+        this.placeMarkerAndGeocode(event.latLng);
+    });
+
+    // Cargar la dirección si ya tenemos coordenadas
+    if (this.reviewData.latitude) {
+        this.reverseGeocode(center);
+    }
+  }
+  /**
+   * Mueve el marcador a la nueva posición y actualiza las coordenadas del modelo.
+   */
+  placeMarkerAndGeocode(latLng: any) {
+    this.marker.setPosition(latLng);
+    this.map.setCenter(latLng);
+    
+    // Actualizar coordenadas del modelo
+    this.reviewData.latitude = latLng.lat();
+    this.reviewData.longitude = latLng.lng();
+
+    // Obtener la dirección a partir de las coordenadas
+    this.reverseGeocode(latLng);
+  }
+
+  /**
+   * Obtiene la dirección legible a partir de las coordenadas (Geocodificación Inversa).
+   */
+  reverseGeocode(latLng: any) {
+    this.geocoder.geocode({ 'location': latLng }, (results: any, status: any) => {
+        if (status === 'OK' && results[0]) {
+            // Cargar la dirección formateada en el input
+            this.reviewData.address = results[0].formatted_address;
+        } else {
+            this.reviewData.address = 'Dirección no encontrada';
+            console.error('Geocodificación inversa fallida:', status);
+        }
+    });
+  }
 
 // --- GESTIÓN DE CÁMARA Y UBICACIÓN ---
   
@@ -98,7 +200,7 @@ export class CreateReviewPage implements OnInit {
   }
 
   // 📍 Llama al plugin de geolocalización
-  async getCurrentLocation() {
+  async getCurrentLocation(initMapAfter = false) {
     this.isLocating = true;
     this.errorMessage = null;
     try {
@@ -106,9 +208,23 @@ export class CreateReviewPage implements OnInit {
       this.reviewData.latitude = position.coords.latitude;
       this.reviewData.longitude = position.coords.longitude;
       this.presentToast('Ubicación capturada con éxito.', 'success');
+      
+      // Si se inicia el mapa después de obtener la ubicación
+      if (initMapAfter && typeof google !== 'undefined') {
+        this.initMap();
+      } else if (this.map) {
+        // Si el mapa ya estaba cargado, simplemente lo centramos
+        const newCenter = { lat: this.reviewData.latitude!, lng: this.reviewData.longitude! };
+        this.placeMarkerAndGeocode(newCenter);
+      }
+      
     } catch (e) {
       console.error('Error al obtener ubicación:', e);
       this.errorMessage = 'No se pudo obtener la ubicación. Verifica los permisos de GPS.';
+      // Si falla la ubicación, solo inicializamos el mapa con el centro por defecto
+      if (initMapAfter && typeof google !== 'undefined') {
+        this.initMap();
+      }
     } finally {
       this.isLocating = false;
     }

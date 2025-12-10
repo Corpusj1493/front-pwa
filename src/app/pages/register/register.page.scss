@@ -19,6 +19,16 @@
   width: 100%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border-radius: 12px;
+  overflow: visible;
+}
+// 🎯 Nuevo estilo para el contenedor del reCAPTCHA
+.recaptcha-container {
+    // Forzar el centrado del reCAPTCHA (que es un bloque)
+    display: flex;
+    justify-content: center;
+    /* Eliminar cualquier margen negativo o transform que lo mueva */
+    /* width: 100%; <- No es necesario si ya está en un div */
+    padding: 15px 0; // Padding vertical para separarlo de los inputs
 }
 
 ion-item {
